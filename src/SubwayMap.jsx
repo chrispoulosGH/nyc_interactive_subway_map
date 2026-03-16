@@ -104,7 +104,7 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
   useMapEvents({ zoomend: (e) => setZoom(e.target.getZoom()) });
 
   const showLines    = zoom >= 13;
-  const labelSize    = Math.max(9, Math.round(((zoom - 11) * 2.5 + 9) * 1.3));
+  const labelSize    = Math.max(7, Math.round((zoom - 11) * 1.2 + 8));
   const circleRadius = Math.max(3, Math.round((zoom - 11) * 1.5 + 4));
 
   return (
@@ -230,12 +230,12 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
           >
             {showLabels && (
               <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent={true} className="station-label">
-                <span style={{ fontSize: labelSize }}>{station.name}</span>
-                {showLines && <><br /><span style={{ fontSize: labelSize - 2, opacity: 0.75 }}>{station.lines.join(' · ')}</span></>}
-                {showRidership && riders > 0 && <><br /><span style={{ fontSize: labelSize - 2, color: '#93c5fd' }}>👥 {riders.toLocaleString()} riders/hr</span></>}
-                {vol > 0 && <><br /><span style={{ fontSize: labelSize - 2, color: '#6ee7b7' }}>🚇 {vol} train{vol !== 1 ? 's' : ''} arriving</span></>}
-                {showCrime && stationCrime[station.id] > 0 && <><br /><span style={{ fontSize: labelSize - 2, color: '#fca5a5' }}>🚨 {stationCrime[station.id]} incidents YTD</span></>}
-                {stationAlert && <><br /><span style={{ fontSize: labelSize - 2, color: SEVERITY_COLOR[stationAlert.severity] }}>⚠ {stationAlert.effect}</span></>}
+                <span style={{ fontSize: labelSize, fontWeight: 300 }}>{station.name}</span>
+                {showLines && <><br /><span style={{ fontSize: labelSize - 1, fontWeight: 300, opacity: 0.75 }}>{station.lines.join(' · ')}</span></>}
+                {showRidership && riders > 0 && <><br /><span style={{ fontSize: labelSize - 1, fontWeight: 300, color: '#93c5fd' }}>👥 {riders.toLocaleString()} riders/hr</span></>}
+                {vol > 0 && <><br /><span style={{ fontSize: labelSize - 1, fontWeight: 300, color: '#6ee7b7' }}>🚇 {vol} train{vol !== 1 ? 's' : ''} arriving</span></>}
+                {showCrime && stationCrime[station.id] > 0 && <><br /><span style={{ fontSize: labelSize - 1, fontWeight: 300, color: '#fca5a5' }}>🚨 {stationCrime[station.id]} incidents YTD</span></>}
+                {stationAlert && <><br /><span style={{ fontSize: labelSize - 1, fontWeight: 300, color: SEVERITY_COLOR[stationAlert.severity] }}>⚠ {stationAlert.effect}</span></>}
               </Tooltip>
             )}
           </CircleMarker>
