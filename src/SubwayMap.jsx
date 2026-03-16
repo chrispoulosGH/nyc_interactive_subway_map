@@ -22,6 +22,17 @@ function FitBounds() {
   return null;
 }
 
+function CreatePane({ name, zIndex }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!map.getPane(name)) {
+      const pane = map.createPane(name);
+      pane.style.zIndex = zIndex;
+    }
+  }, [map, name, zIndex]);
+  return null;
+}
+
 function ZoomControls() {
   const map = useMap();
   const btnStyle = {
@@ -94,7 +105,7 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
 
   const showLines    = zoom >= 13;
   const labelSize    = Math.max(9, Math.round(((zoom - 11) * 2.5 + 9) * 1.3));
-  const circleRadius = Math.max(5, Math.round(((zoom - 11) * 3 + 8) * 1.3));
+  const circleRadius = Math.max(3, Math.round((zoom - 11) * 1.5 + 4));
 
   return (
     <>
@@ -208,11 +219,12 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
             key={station.id}
             center={[station.lat, station.lng]}
             radius={radius}
+            pane="stations"
             pathOptions={{
               color:       isSelected ? '#fff' : stationAlert ? SEVERITY_COLOR[stationAlert.severity] : '#111',
               fillColor,
               fillOpacity: 1,
-              weight:      isSelected ? 3 : stationAlert ? 3 : 1.5,
+              weight:      isSelected ? 1.5 : stationAlert ? 1.5 : 0.5,
             }}
             eventHandlers={{ click: () => setSelected(isSelected ? null : station.id) }}
           >
@@ -700,6 +712,7 @@ export default function SubwayMap() {
           >
             <FitBounds />
             <ZoomControls />
+            <CreatePane name="stations" zIndex={450} />
             <TileLayer
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://carto.com/">CARTO</a>'
