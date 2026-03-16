@@ -25,9 +25,9 @@ function FitBounds() {
 function ZoomControls() {
   const map = useMap();
   const btnStyle = {
-    width: 196, height: 196, fontSize: 112, fontWeight: 'bold',
+    width: 49, height: 49, fontSize: 28, fontWeight: 'bold',
     background: 'rgba(15,20,40,0.92)', color: '#eee',
-    border: '1px solid #0f3460', cursor: 'pointer', borderRadius: 16,
+    border: '1px solid #0f3460', cursor: 'pointer', borderRadius: 4,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     lineHeight: 1,
   };
@@ -39,7 +39,7 @@ function ZoomControls() {
       <button style={btnStyle} onClick={() => map.zoomIn()}>+</button>
       <button style={btnStyle} onClick={() => map.zoomOut()}>−</button>
       <button
-        style={{ ...btnStyle, fontSize: 38, height: 98 }}
+        style={{ ...btnStyle, fontSize: 10, height: 25 }}
         onClick={() => { map.fitBounds(BOUNDS, { padding: [24, 24] }); setTimeout(() => map.zoomIn(3.4), 100); }}
       >Reset</button>
     </div>
@@ -653,11 +653,11 @@ export default function SubwayMap() {
 
       {/* Header */}
       <div style={{ padding: '10px 20px', background: '#16213e', borderBottom: '1px solid #0f3460', display: 'flex', alignItems: 'center', color: '#eee' }}>
-        <h1 style={{ margin: 0, fontSize: 60, color: '#e94560', flexShrink: 0 }}>NYC Subway Network</h1>
+        <h1 style={{ margin: 0, fontSize: 15, color: '#e94560', flexShrink: 0 }}>NYC Subway Network</h1>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 18, fontSize: 58 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>
           <span style={{
-            width: 45, height: 45, borderRadius: '50%', display: 'inline-block', flexShrink: 0,
+            width: 11, height: 11, borderRadius: '50%', display: 'inline-block', flexShrink: 0,
             background: status === 'live' ? '#22c55e' : status === 'error' ? '#ef4444' : '#f59e0b',
             boxShadow: status === 'live' ? '0 0 14px #22c55e' : 'none',
           }} />
@@ -678,8 +678,8 @@ export default function SubwayMap() {
           )}
           {severityFilter.size > 0 && (
             <button onClick={() => setSeverityFilter(new Set())} style={{
-              padding: '8px 28px', borderRadius: 12, cursor: 'pointer',
-              fontSize: 52, fontWeight: 'bold', border: 'none',
+              padding: '2px 7px', borderRadius: 3, cursor: 'pointer',
+              fontSize: 13, fontWeight: 'bold', border: 'none',
               background: '#374151', color: '#f59e0b', transition: 'all 0.2s',
             }}>✕ Clear Filter</button>
           )}
@@ -734,12 +734,12 @@ export default function SubwayMap() {
           {/* Alert legend */}
           <div style={{
             position: 'absolute', top: 16, right: 16, zIndex: 1000,
-            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 28,
-            border: '1px solid #374151', padding: '36px 44px',
-            backdropFilter: 'blur(6px)', minWidth: 720,
+            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 7,
+            border: '1px solid #374151', padding: '9px 11px',
+            backdropFilter: 'blur(6px)', minWidth: 180,
             maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
           }}>
-            <div style={{ fontSize: 38, fontWeight: 'bold', color: '#e5e7eb', marginBottom: 28, letterSpacing: 1 }}>
+            <div style={{ fontSize: 10, fontWeight: 'bold', color: '#e5e7eb', marginBottom: 7, letterSpacing: 1 }}>
               ALERT TYPES
             </div>
 
@@ -751,37 +751,37 @@ export default function SubwayMap() {
               <div
                 key={sev}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 28,
-                  width: '100%', marginBottom: 20,
-                  padding: '22px 28px', borderRadius: 18,
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  width: '100%', marginBottom: 5,
+                  padding: '6px 7px', borderRadius: 5,
                   background: 'rgba(255,255,255,0.03)',
-                  border: `2px solid ${color}55`,
+                  border: `1px solid ${color}55`,
                 }}
               >
-                <svg width={100} height={28} style={{ flexShrink: 0 }}>
-                  <line x1={0} y1={14} x2={100} y2={14}
-                    stroke={color} strokeWidth={8} strokeDasharray="16 11" />
+                <svg width={25} height={7} style={{ flexShrink: 0 }}>
+                  <line x1={0} y1={3.5} x2={25} y2={3.5}
+                    stroke={color} strokeWidth={2} strokeDasharray="4 3" />
                 </svg>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 36, fontWeight: 'bold', color, marginBottom: 6 }}>{label}</div>
-                  <div style={{ fontSize: 26, color: '#9ca3af', marginBottom: 4 }}>{desc}</div>
-                  <div style={{ fontSize: 22, color: '#4b5563' }}>{effect}</div>
+                  <div style={{ fontSize: 9, fontWeight: 'bold', color, marginBottom: 2 }}>{label}</div>
+                  <div style={{ fontSize: 7, color: '#9ca3af', marginBottom: 1 }}>{desc}</div>
+                  <div style={{ fontSize: 6, color: '#4b5563' }}>{effect}</div>
                 </div>
               </div>
             ))}
 
-            <div style={{ borderTop: '1px solid #374151', marginTop: 8, paddingTop: 28 }}>
-              <div style={{ fontSize: 28, fontWeight: 'bold', color: '#e5e7eb', marginBottom: 20 }}>MAP INDICATORS</div>
+            <div style={{ borderTop: '1px solid #374151', marginTop: 4, paddingTop: 7 }}>
+              <div style={{ fontSize: 7, fontWeight: 'bold', color: '#e5e7eb', marginBottom: 5 }}>MAP INDICATORS</div>
               {[
                 { icon: '━━', color: '#6b7280',        label: 'Line weight',  desc: 'Thicker = more active trains' },
                 { icon: '◉',  color: SEVERITY_COLOR[1], label: 'Station ring', desc: 'Colored ring = alert on that line' },
                 { icon: '🚇', color: '#6ee7b7',        label: 'Arrivals',     desc: 'Trains arriving within 10 min (hover)' },
               ].map(({ icon, color, label, desc }) => (
-                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 20, padding: '10px 0' }}>
-                  <span style={{ fontSize: 40, color, width: 68, textAlign: 'center', flexShrink: 0 }}>{icon}</span>
+                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5, padding: '3px 0' }}>
+                  <span style={{ fontSize: 10, color, width: 17, textAlign: 'center', flexShrink: 0 }}>{icon}</span>
                   <div>
-                    <div style={{ fontSize: 28, color: '#d1d5db', fontWeight: 'bold', marginBottom: 4 }}>{label}</div>
-                    <div style={{ fontSize: 23, color: '#9ca3af' }}>{desc}</div>
+                    <div style={{ fontSize: 7, color: '#d1d5db', fontWeight: 'bold', marginBottom: 1 }}>{label}</div>
+                    <div style={{ fontSize: 6, color: '#9ca3af' }}>{desc}</div>
                   </div>
                 </div>
               ))}
@@ -793,16 +793,16 @@ export default function SubwayMap() {
 
           {/* Lines legend */}
           <div style={{
-            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 12,
-            border: '1px solid #0f3460', padding: '32px 36px',
+            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 6,
+            border: '1px solid #0f3460', padding: '8px 9px',
             backdropFilter: 'blur(6px)',
             maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28, gap: 20 }}>
-              <div style={{ fontSize: 32, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Lines</div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7, gap: 5 }}>
+              <div style={{ fontSize: 8, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Lines</div>
               <button onClick={toggleAll} style={{
-                padding: '8px 24px', borderRadius: 12, cursor: 'pointer',
-                fontSize: 26, fontWeight: 'bold', border: 'none',
+                padding: '2px 6px', borderRadius: 3, cursor: 'pointer',
+                fontSize: 7, fontWeight: 'bold', border: 'none',
                 background: allOn ? '#e94560' : '#22aa55', color: '#fff',
               }}>
                 {allOn ? 'All Off' : 'All On'}
@@ -816,21 +816,21 @@ export default function SubwayMap() {
                   onClick={() => toggleLine(id)}
                   onContextMenu={e => { e.preventDefault(); setContextMenu({ lineId: id, x: e.clientX, y: e.clientY }); }}
                   style={{
-                  display: 'flex', alignItems: 'center', gap: 36,
-                  width: '100%', marginBottom: 20, padding: '18px 28px',
-                  borderRadius: 20, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 9,
+                  width: '100%', marginBottom: 5, padding: '5px 7px',
+                  borderRadius: 5, cursor: 'pointer',
                   background: active ? 'rgba(255,255,255,0.07)' : 'transparent',
                   border: `1px solid ${active ? line.color : '#333'}`,
                   opacity: active ? 1 : 0.4, transition: 'all 0.15s',
                 }}>
                   <span style={{
-                    width: 112, height: 112, borderRadius: '50%', flexShrink: 0,
+                    width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
                     background: active ? line.color : '#333',
                     color: line.color === '#FCCC0A' ? '#000' : '#fff',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontWeight: 'bold', fontSize: 48,
+                    fontWeight: 'bold', fontSize: 12,
                   }}>{id}</span>
-                  <span style={{ fontSize: 40, color: active ? '#ddd' : '#555', textAlign: 'left' }}>{line.name}</span>
+                  <span style={{ fontSize: 10, color: active ? '#ddd' : '#555', textAlign: 'left' }}>{line.name}</span>
                 </button>
               );
             })}
@@ -838,13 +838,13 @@ export default function SubwayMap() {
 
           {/* Control panel */}
           <div style={{
-            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 12,
-            border: '1px solid #0f3460', padding: '32px 36px',
+            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 6,
+            border: '1px solid #0f3460', padding: '8px 9px',
             backdropFilter: 'blur(6px)',
-            display: 'flex', flexDirection: 'column', gap: 20,
+            display: 'flex', flexDirection: 'column', gap: 5,
             maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
           }}>
-            <div style={{ fontSize: 32, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 8 }}>Controls</div>
+            <div style={{ fontSize: 8, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 2 }}>Controls</div>
 
             {/* Overlay toggles */}
             {[
@@ -854,23 +854,23 @@ export default function SubwayMap() {
               { label: 'Station Labels', icon: '🏷', active: showLabels,    toggle: () => setShowLabels(v => !v),    color: '#a78bfa' },
             ].map(({ label, icon, active, toggle, color }) => (
               <button key={label} onClick={toggle} style={{
-                display: 'flex', alignItems: 'center', gap: 36,
-                width: '100%', padding: '18px 28px', borderRadius: 20,
+                display: 'flex', alignItems: 'center', gap: 9,
+                width: '100%', padding: '5px 7px', borderRadius: 5,
                 cursor: 'pointer', border: `1px solid ${active ? color : '#6b7280'}`,
                 background: active ? `${color}22` : 'rgba(255,255,255,0.06)',
                 transition: 'all 0.15s',
               }}>
-                <span style={{ fontSize: 48, flexShrink: 0 }}>{icon}</span>
-                <span style={{ fontSize: 40, color: active ? '#ddd' : '#9ca3af', textAlign: 'left', flex: 1 }}>{label}</span>
+                <span style={{ fontSize: 12, flexShrink: 0 }}>{icon}</span>
+                <span style={{ fontSize: 10, color: active ? '#ddd' : '#9ca3af', textAlign: 'left', flex: 1 }}>{label}</span>
                 <span style={{
-                  width: 56, height: 30, borderRadius: 15, flexShrink: 0,
+                  width: 14, height: 8, borderRadius: 4, flexShrink: 0,
                   background: active ? color : '#4b5563',
-                  display: 'flex', alignItems: 'center', padding: '0 4px',
+                  display: 'flex', alignItems: 'center', padding: '0 1px',
                   transition: 'background 0.2s',
                 }}>
                   <span style={{
-                    width: 22, height: 22, borderRadius: '50%', background: '#fff',
-                    transform: active ? 'translateX(26px)' : 'translateX(0)',
+                    width: 6, height: 6, borderRadius: '50%', background: '#fff',
+                    transform: active ? 'translateX(7px)' : 'translateX(0)',
                     transition: 'transform 0.2s', display: 'block',
                   }} />
                 </span>
@@ -878,7 +878,7 @@ export default function SubwayMap() {
             ))}
 
             {/* Alert type toggles */}
-            <div style={{ fontSize: 32, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginTop: 12, marginBottom: 0 }}>Alert Filter</div>
+            <div style={{ fontSize: 8, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginTop: 3, marginBottom: 0 }}>Alert Filter</div>
             {[
               { sev: 1, color: SEVERITY_COLOR[1], label: 'Minor Delay',       icon: '⚠' },
               { sev: 2, color: SEVERITY_COLOR[2], label: 'Major Delay',        icon: '🔴' },
@@ -887,24 +887,24 @@ export default function SubwayMap() {
               const active = severityFilter.has(sev);
               return (
                 <button key={sev} onClick={() => toggleSeverity(sev)} style={{
-                  display: 'flex', alignItems: 'center', gap: 36,
-                  width: '100%', padding: '18px 28px', borderRadius: 20,
+                  display: 'flex', alignItems: 'center', gap: 9,
+                  width: '100%', padding: '5px 7px', borderRadius: 5,
                   cursor: 'pointer', border: `1px solid ${active ? color : '#6b7280'}`,
                   background: active ? `${color}22` : 'rgba(255,255,255,0.06)',
                   transition: 'all 0.15s',
-                  boxShadow: active ? `0 0 10px ${color}44` : 'none',
+                  boxShadow: active ? `0 0 3px ${color}44` : 'none',
                 }}>
-                  <span style={{ fontSize: 48, flexShrink: 0 }}>{icon}</span>
-                  <span style={{ fontSize: 40, color: active ? color : '#9ca3af', textAlign: 'left', flex: 1 }}>{label}</span>
+                  <span style={{ fontSize: 12, flexShrink: 0 }}>{icon}</span>
+                  <span style={{ fontSize: 10, color: active ? color : '#9ca3af', textAlign: 'left', flex: 1 }}>{label}</span>
                   <span style={{
-                    width: 56, height: 30, borderRadius: 15, flexShrink: 0,
+                    width: 14, height: 8, borderRadius: 4, flexShrink: 0,
                     background: active ? color : '#4b5563',
-                    display: 'flex', alignItems: 'center', padding: '0 4px',
+                    display: 'flex', alignItems: 'center', padding: '0 1px',
                     transition: 'background 0.2s',
                   }}>
                     <span style={{
-                      width: 22, height: 22, borderRadius: '50%', background: '#fff',
-                      transform: active ? 'translateX(26px)' : 'translateX(0)',
+                      width: 6, height: 6, borderRadius: '50%', background: '#fff',
+                      transform: active ? 'translateX(7px)' : 'translateX(0)',
                       transition: 'transform 0.2s', display: 'block',
                     }} />
                   </span>
