@@ -232,7 +232,7 @@ app.get('/api/schedule/:lineId', async (req, res) => {
         nextStop:      stops[next.stopId]?.name || next.stopId,
         destination:   stops[dest.stopId]?.name || dest.stopId,
         departureTime: next.time * 1000,
-        departureAt:   new Date(next.time * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }),
+        departureAt:   new Date(next.time * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }),
         stops:         upcoming.length,
       });
     }
