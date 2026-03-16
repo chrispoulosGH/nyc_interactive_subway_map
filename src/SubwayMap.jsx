@@ -665,7 +665,7 @@ export default function SubwayMap() {
 
       {/* Header */}
       <div style={{ padding: '10px 20px', background: '#16213e', borderBottom: '1px solid #0f3460', display: 'flex', alignItems: 'center', color: '#eee' }}>
-        <h1 style={{ margin: 0, fontSize: 15, color: '#e94560', flexShrink: 0 }}>NYC Subway Network</h1>
+        <h1 style={{ margin: 0, fontSize: 22, color: '#ffffff', flexShrink: 0 }}>NYC Subway Interactive Map</h1>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>
           <span style={{
