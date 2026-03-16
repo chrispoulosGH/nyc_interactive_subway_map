@@ -106,7 +106,7 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
             if (!activeRoute) return [];
             const color  = LINES[activeRoute]?.color || '#fff';
             const trips  = routeNames.reduce((sum, r) => sum + (trainCounts[r] || 0), 0);
-            const weight = Math.min(10, 3 + trips * 0.15);
+            const weight = Math.min(4, 1 + trips * 0.05);
             const rings  = feature.geometry.type === 'MultiLineString'
               ? feature.geometry.coordinates
               : [feature.geometry.coordinates];
@@ -123,7 +123,7 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
             const to    = STATION_MAP[edge.to];
             if (!from || !to) return null;
             const trips  = trainCounts[edge.line] || 0;
-            const weight = Math.min(10, 3 + trips * 0.15);
+            const weight = Math.min(4, 1 + trips * 0.05);
             return (
               <Polyline
                 key={i}
@@ -144,7 +144,7 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
           <Polyline
             key={`alert-${i}`}
             positions={[[from.lat, from.lng], [to.lat, to.lng]]}
-            pathOptions={{ color: SEVERITY_COLOR[alert.severity] || '#f59e0b', weight: 4, opacity: 0.7, dashArray: '8 10' }}
+            pathOptions={{ color: SEVERITY_COLOR[alert.severity] || '#f59e0b', weight: 1.5, opacity: 0.7, dashArray: '4 5' }}
           />
         );
       })}
