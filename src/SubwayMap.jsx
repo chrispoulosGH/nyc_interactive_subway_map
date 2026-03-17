@@ -90,13 +90,16 @@ function makeTrainIcon(color, bearing, scale = 1) {
   const rh = Math.max(3, Math.round(8 * scale));
   const rx = Math.max(1, Math.round(2 * scale));
   const sw = Math.max(1, Math.round(2 * scale));
-  const html = `<svg width="24" height="24" viewBox="-12 -12 24 24" style="overflow:visible">
-    <rect x="${-rw / 2}" y="${-rh / 2}" width="${rw}" height="${rh}" rx="${rx}"
+  // Square SVG large enough to contain the rect at any rotation angle
+  const size = Math.ceil(Math.sqrt(rw * rw + rh * rh)) + sw * 2 + 4;
+  const c    = size / 2;
+  const html = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <rect x="${c - rw / 2}" y="${c - rh / 2}" width="${rw}" height="${rh}" rx="${rx}"
       fill="white" stroke="${color}" stroke-width="${sw}"
-      transform="rotate(${bearing})"
+      transform="rotate(${bearing}, ${c}, ${c})"
       style="filter:drop-shadow(0 0 3px rgba(0,0,0,0.8))"/>
   </svg>`;
-  return L.divIcon({ html, className: '', iconSize: [24, 24], iconAnchor: [12, 12] });
+  return L.divIcon({ html, className: '', iconSize: [size, size], iconAnchor: [c, c] });
 }
 
 function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activeLines, alertsByRoute = {}, trainCounts = {}, stopVolume = {}, stationRidership = {}, maxRidership = 1, showRidership = false, showLabels = true, stationCrime = {}, maxCrime = 1, showCrime = false, shapes = null }) {
