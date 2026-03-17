@@ -128,7 +128,7 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
               <Polyline
                 key={`shape-${i}-${j}`}
                 positions={coords.map(([lng, lat]) => [lat, lng])}
-                pathOptions={{ color, weight, opacity: 0.85 }}
+                pathOptions={{ color, weight, opacity: 0.85, interactive: false }}
               />
             ));
           })
@@ -164,8 +164,8 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
               color: 'transparent', weight: 0,
               fillColor: '#00aaff',
               fillOpacity: 0.15 + 0.45 * ratio,
+              interactive: false,
             }}
-            eventHandlers={{ click: () => setSelected(selected === station.id ? null : station.id) }}
           />
         );
       })}
@@ -186,8 +186,8 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
               color: 'transparent', weight: 0,
               fillColor: `rgb(239,${g},0)`,
               fillOpacity: 0.18 + 0.45 * ratio,
+              interactive: false,
             }}
-            eventHandlers={{ click: () => setSelected(selected === station.id ? null : station.id) }}
           />
         );
       })}
