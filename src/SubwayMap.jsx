@@ -811,7 +811,7 @@ export default function SubwayMap() {
             backdropFilter: 'blur(6px)',
             maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7, gap: 5 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3, gap: 5 }}>
               <div style={{ fontSize: 8, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Lines</div>
               <button onClick={toggleAll} style={{
                 padding: '2px 6px', borderRadius: 3, cursor: 'pointer',
@@ -821,6 +821,7 @@ export default function SubwayMap() {
                 {allOn ? 'All Off' : 'All On'}
               </button>
             </div>
+            <div style={{ fontSize: 7, color: '#556', marginBottom: 6, fontStyle: 'italic' }}>Right-click line for schedule</div>
 
             {Object.entries(LINES).map(([id, line]) => {
               const active = activeLines.has(id);
@@ -828,6 +829,7 @@ export default function SubwayMap() {
                 <button key={id}
                   onClick={() => toggleLine(id)}
                   onContextMenu={e => { e.preventDefault(); setContextMenu({ lineId: id, x: e.clientX, y: e.clientY }); }}
+                  title="Right-click for schedule"
                   style={{
                   display: 'flex', alignItems: 'center', gap: 9,
                   width: '100%', marginBottom: 5, padding: '5px 7px',
@@ -1046,7 +1048,7 @@ export default function SubwayMap() {
       </div>
 
       <div style={{ padding: '4px 16px', background: '#16213e', fontSize: 11, color: '#555', borderTop: '1px solid #0f3460' }}>
-        Scroll to zoom · Click + drag to pan · Click station to select · Right-click line for schedule
+        Scroll to zoom · Click + drag to pan · Click station for Station Info · Right-click line for Schedule
       </div>
 
       {/* Context menu */}
