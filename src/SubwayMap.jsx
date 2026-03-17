@@ -835,7 +835,7 @@ export default function SubwayMap() {
               <button onClick={toggleAll} style={{
                 padding: '2px 6px', borderRadius: 3, cursor: 'pointer',
                 fontSize: 7, fontWeight: 'bold', border: 'none',
-                background: allOn ? '#e94560' : '#22aa55', color: '#fff',
+                background: allOn ? '#4a5568' : '#22aa55', color: '#fff',
               }}>
                 {allOn ? 'All Off' : 'All On'}
               </button>
