@@ -86,8 +86,8 @@ const NYC_CENTER = [40.728, -73.948];
 const INITIAL_ZOOM = 12;
 
 function makeTrainIcon(color, bearing, scale = 1) {
-  const rw = Math.round(32 * scale);
-  const rh = Math.max(3, Math.round(8 * scale));
+  const rw = Math.round(21 * scale);
+  const rh = Math.max(2, Math.round(5 * scale));
   const rx = Math.max(1, Math.round(2 * scale));
   const sw = Math.max(1, Math.round(2 * scale));
   // Square SVG large enough to contain the rect at any rotation angle
