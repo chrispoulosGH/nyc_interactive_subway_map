@@ -812,7 +812,7 @@ export default function SubwayMap() {
             maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3, gap: 5 }}>
-              <div style={{ fontSize: 8, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Lines</div>
+              <div style={{ fontSize: 12, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Lines</div>
               <button onClick={toggleAll} style={{
                 padding: '2px 6px', borderRadius: 3, cursor: 'pointer',
                 fontSize: 7, fontWeight: 'bold', border: 'none',
@@ -821,7 +821,7 @@ export default function SubwayMap() {
                 {allOn ? 'All Off' : 'All On'}
               </button>
             </div>
-            <div style={{ fontSize: 7, color: '#556', marginBottom: 6, fontStyle: 'italic' }}>Right-click line for schedule</div>
+            <div style={{ fontSize: 7, color: '#8899bb', marginBottom: 6, fontStyle: 'italic' }}>Right-click line for schedule</div>
 
             {Object.entries(LINES).map(([id, line]) => {
               const active = activeLines.has(id);
@@ -859,7 +859,7 @@ export default function SubwayMap() {
             display: 'flex', flexDirection: 'column', gap: 5,
             maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
           }}>
-            <div style={{ fontSize: 9, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 2 }}>Controls</div>
+            <div style={{ fontSize: 12, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 2 }}>Controls</div>
 
             {/* Overlay toggles */}
             {[
@@ -1048,7 +1048,7 @@ export default function SubwayMap() {
       </div>
 
       <div style={{ padding: '4px 16px', background: '#16213e', fontSize: 11, color: '#555', borderTop: '1px solid #0f3460' }}>
-        Scroll to zoom · Click + drag to pan · Click station for Station Info · Right-click line for Schedule
+        Scroll to zoom · Click + drag to pan
       </div>
 
       {/* Context menu */}
