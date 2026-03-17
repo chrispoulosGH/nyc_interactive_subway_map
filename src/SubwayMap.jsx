@@ -436,15 +436,15 @@ function ScheduleDialog({ schedule, onClose, onMove, onResize }) {
     const mins     = Math.round((trip.departureTime - now) / 60000);
     const minColor = mins <= 2 ? '#ef4444' : mins <= 5 ? '#f59e0b' : '#6ee7b7';
     return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20, padding: '16px 20px', marginBottom: 10, borderRadius: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid #1e3a5f' }}>
-        <div style={{ minWidth: 80, fontWeight: 'bold', fontSize: 36, color: minColor, textAlign: 'center', flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '9px 11px', marginBottom: 5, borderRadius: 7, background: 'rgba(255,255,255,0.04)', border: '1px solid #1e3a5f' }}>
+        <div style={{ minWidth: 43, fontWeight: 'bold', fontSize: 19, color: minColor, textAlign: 'center', flexShrink: 0 }}>
           {mins <= 0 ? 'Now' : `${mins}m`}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 32, color: '#eee', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>→ {trip.destination}</div>
-          <div style={{ fontSize: 24, color: '#6b7280', marginTop: 4 }}>{trip.departureAt} · via {trip.nextStop}</div>
+          <div style={{ fontSize: 17, color: '#eee', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>→ {trip.destination}</div>
+          <div style={{ fontSize: 13, color: '#6b7280', marginTop: 2 }}>{trip.departureAt} · via {trip.nextStop}</div>
         </div>
-        <div style={{ fontSize: 24, color: '#4b5563', flexShrink: 0 }}>{trip.stops} stops</div>
+        <div style={{ fontSize: 13, color: '#4b5563', flexShrink: 0 }}>{trip.stops} stops</div>
       </div>
     );
   };
@@ -485,43 +485,43 @@ function ScheduleDialog({ schedule, onClose, onMove, onResize }) {
 
       {/* Title bar */}
       <div onMouseDown={handleDragDown} style={{
-        display: 'flex', alignItems: 'center', gap: 18, padding: '18px 24px', flexShrink: 0,
+        display: 'flex', alignItems: 'center', gap: 9, padding: '9px 13px', flexShrink: 0,
         cursor: isDragging ? 'grabbing' : 'grab',
         background: `${lineColor}22`, borderBottom: `1px solid ${lineColor}55`,
         borderRadius: '14px 14px 0 0',
       }}>
         <div style={{
-          width: 72, height: 72, borderRadius: '50%', background: lineColor, color: textColor,
+          width: 39, height: 39, borderRadius: '50%', background: lineColor, color: textColor,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontWeight: 'bold', fontSize: 36, flexShrink: 0,
+          fontWeight: 'bold', fontSize: 19, flexShrink: 0,
         }}>{lineId}</div>
-        <span style={{ flex: 1, fontSize: 36, fontWeight: 'bold', color: '#eee' }}>
+        <span style={{ flex: 1, fontSize: 19, fontWeight: 'bold', color: '#eee' }}>
           {LINES[lineId]?.name} — Schedule
         </span>
         <button onClick={onClose} style={{
-          background: 'none', border: 'none', cursor: 'pointer', fontSize: 32,
-          color: '#666', padding: '6px 8px',
+          background: 'none', border: 'none', cursor: 'pointer', fontSize: 17,
+          color: '#666', padding: '3px 4px',
         }}>✕</button>
       </div>
 
       {/* Body */}
       <div style={{ flex: 1, overflowY: 'auto', padding: 20 }}>
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#555', fontSize: 32 }}>Loading schedule…</div>
+          <div style={{ textAlign: 'center', padding: 25, color: '#555', fontSize: 17 }}>Loading schedule…</div>
         ) : (
           [{ label: 'Uptown / Bronx', dir: 'N', rows: north }, { label: 'Downtown / Brooklyn', dir: 'S', rows: south }].map(({ label, dir, rows }) => (
-            <div key={dir} style={{ marginBottom: 28 }}>
-              <div style={{ fontSize: 28, fontWeight: 'bold', color: lineColor, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 14, paddingBottom: 10, borderBottom: `1px solid ${lineColor}44` }}>
+            <div key={dir} style={{ marginBottom: 15 }}>
+              <div style={{ fontSize: 15, fontWeight: 'bold', color: lineColor, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 7, paddingBottom: 5, borderBottom: `1px solid ${lineColor}44` }}>
                 {label}
               </div>
               {rows.length === 0
-                ? <div style={{ fontSize: 28, color: '#4b5563', padding: '12px 0' }}>No upcoming departures</div>
+                ? <div style={{ fontSize: 15, color: '#4b5563', padding: '7px 0' }}>No upcoming departures</div>
                 : rows.map(t => <TripRow key={t.tripId} trip={t} />)
               }
             </div>
           ))
         )}
-        {!loading && <div style={{ fontSize: 22, color: '#374151', textAlign: 'right', marginTop: 8 }}>Updated {new Date().toLocaleTimeString()}</div>}
+        {!loading && <div style={{ fontSize: 12, color: '#374151', textAlign: 'right', marginTop: 4 }}>Updated {new Date().toLocaleTimeString()}</div>}
       </div>
     </div>
   );
@@ -567,7 +567,7 @@ export default function SubwayMap() {
     // If already open, just refresh
     setSchedules(prev => {
       if (prev.find(s => s.lineId === lineId)) return prev;
-      return [...prev, { lineId, trips: [], pos: { x: 320 + prev.length * 30, y: 120 + prev.length * 30 }, size: { w: 700, h: 620 }, loading: true }];
+      return [...prev, { lineId, trips: [], pos: { x: 320 + prev.length * 30, y: 120 + prev.length * 30 }, size: { w: 375, h: 332 }, loading: true }];
     });
     fetch(`/api/schedule/${lineId}`)
       .then(r => r.json())
@@ -747,13 +747,13 @@ export default function SubwayMap() {
           {/* Alert legend */}
           <div style={{
             position: 'absolute', top: 16, right: 16, zIndex: 1000,
-            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 7,
-            border: '1px solid #374151', padding: '9px 11px',
-            backdropFilter: 'blur(6px)', minWidth: 180,
+            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 8,
+            border: '1px solid #374151', padding: '11px 13px',
+            backdropFilter: 'blur(6px)', minWidth: 216,
             maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
           }}>
-            <div style={{ fontSize: 10, fontWeight: 'bold', color: '#e5e7eb', marginBottom: 7, letterSpacing: 1 }}>
-              ALERT TYPES
+            <div style={{ fontSize: 12, fontWeight: 'bold', color: '#e5e7eb', marginBottom: 8, letterSpacing: 1 }}>
+              ALERTS
             </div>
 
             {[
@@ -764,37 +764,37 @@ export default function SubwayMap() {
               <div
                 key={sev}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 7,
-                  width: '100%', marginBottom: 5,
-                  padding: '6px 7px', borderRadius: 5,
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  width: '100%', marginBottom: 6,
+                  padding: '7px 8px', borderRadius: 6,
                   background: 'rgba(255,255,255,0.03)',
                   border: `1px solid ${color}55`,
                 }}
               >
-                <svg width={25} height={7} style={{ flexShrink: 0 }}>
-                  <line x1={0} y1={3.5} x2={25} y2={3.5}
-                    stroke={color} strokeWidth={2} strokeDasharray="4 3" />
+                <svg width={30} height={8} style={{ flexShrink: 0 }}>
+                  <line x1={0} y1={4} x2={30} y2={4}
+                    stroke={color} strokeWidth={2} strokeDasharray="5 4" />
                 </svg>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 9, fontWeight: 'bold', color, marginBottom: 2 }}>{label}</div>
-                  <div style={{ fontSize: 7, color: '#9ca3af', marginBottom: 1 }}>{desc}</div>
-                  <div style={{ fontSize: 6, color: '#4b5563' }}>{effect}</div>
+                  <div style={{ fontSize: 11, fontWeight: 'bold', color, marginBottom: 2 }}>{label}</div>
+                  <div style={{ fontSize: 8, color: '#9ca3af', marginBottom: 1 }}>{desc}</div>
+                  <div style={{ fontSize: 7, color: '#4b5563' }}>{effect}</div>
                 </div>
               </div>
             ))}
 
-            <div style={{ borderTop: '1px solid #374151', marginTop: 4, paddingTop: 7 }}>
-              <div style={{ fontSize: 7, fontWeight: 'bold', color: '#e5e7eb', marginBottom: 5 }}>MAP INDICATORS</div>
+            <div style={{ borderTop: '1px solid #374151', marginTop: 5, paddingTop: 8 }}>
+              <div style={{ fontSize: 8, fontWeight: 'bold', color: '#e5e7eb', marginBottom: 6 }}>MAP INDICATORS</div>
               {[
                 { icon: '━━', color: '#6b7280',        label: 'Line weight',  desc: 'Thicker = more active trains' },
                 { icon: '◉',  color: SEVERITY_COLOR[1], label: 'Station ring', desc: 'Colored ring = alert on that line' },
                 { icon: '🚇', color: '#6ee7b7',        label: 'Arrivals',     desc: 'Trains arriving within 10 min (hover)' },
               ].map(({ icon, color, label, desc }) => (
-                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5, padding: '3px 0' }}>
-                  <span style={{ fontSize: 10, color, width: 17, textAlign: 'center', flexShrink: 0 }}>{icon}</span>
+                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6, padding: '4px 0' }}>
+                  <span style={{ fontSize: 12, color, width: 20, textAlign: 'center', flexShrink: 0 }}>{icon}</span>
                   <div>
-                    <div style={{ fontSize: 7, color: '#d1d5db', fontWeight: 'bold', marginBottom: 1 }}>{label}</div>
-                    <div style={{ fontSize: 6, color: '#9ca3af' }}>{desc}</div>
+                    <div style={{ fontSize: 8, color: '#d1d5db', fontWeight: 'bold', marginBottom: 1 }}>{label}</div>
+                    <div style={{ fontSize: 7, color: '#9ca3af' }}>{desc}</div>
                   </div>
                 </div>
               ))}
@@ -932,24 +932,25 @@ export default function SubwayMap() {
         {/* Station info panel */}
         {selectedStation && (
           <div style={{
-            width: 520, background: '#16213e', borderLeft: '1px solid #0f3460',
-            padding: 36, overflowY: 'auto', color: '#eee',
+            width: 187, background: '#16213e', borderLeft: '1px solid #0f3460',
+            padding: 13, overflowY: 'auto', color: '#eee',
           }}>
+            <div style={{ fontSize: 10, fontWeight: 'bold', color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 6 }}>Station Info</div>
             <button onClick={() => setSelected(null)} style={{
-              marginBottom: 28, padding: '10px 28px', borderRadius: 10,
+              marginBottom: 8, padding: '2px 8px', borderRadius: 3,
               background: '#0f3460', color: '#eee', border: '1px solid #e94560',
-              cursor: 'pointer', fontSize: 30,
+              cursor: 'pointer', fontSize: 10,
             }}>✕ Close</button>
-            <h3 style={{ margin: '0 0 18px', color: '#e94560', fontSize: 42 }}>{selectedStation.name}</h3>
-            <div style={{ fontSize: 28, color: '#aaa', marginBottom: 18 }}>Lines:</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 32 }}>
+            <h3 style={{ margin: '0 0 6px', color: '#e94560', fontSize: 13 }}>{selectedStation.name}</h3>
+            <div style={{ fontSize: 8, color: '#aaa', marginBottom: 6 }}>Lines:</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 10 }}>
               {selectedStation.lines.map(lineId => (
                 <div key={lineId} style={{
-                  width: 80, height: 80, borderRadius: '50%',
+                  width: 24, height: 24, borderRadius: '50%',
                   background: LINES[lineId]?.color || '#888',
                   color: LINES[lineId]?.color === '#FCCC0A' ? '#000' : '#fff',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontWeight: 'bold', fontSize: 36,
+                  fontWeight: 'bold', fontSize: 11,
                 }}>{lineId}</div>
               ))}
             </div>
@@ -966,45 +967,45 @@ export default function SubwayMap() {
 
               const statRow = (icon, label, value, color, sub) => (
                 <div key={label} style={{
-                  display: 'flex', alignItems: 'center', gap: 24,
-                  padding: '20px 24px', marginBottom: 14, borderRadius: 14,
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  padding: '6px 7px', marginBottom: 5, borderRadius: 5,
                   background: 'rgba(255,255,255,0.04)', border: '1px solid #1e3a5f',
                 }}>
-                  <span style={{ fontSize: 52, flexShrink: 0 }}>{icon}</span>
+                  <span style={{ fontSize: 16, flexShrink: 0 }}>{icon}</span>
                   <div>
-                    <div style={{ fontSize: 26, color: '#9ca3af', marginBottom: 4 }}>{label}</div>
-                    <div style={{ fontSize: 38, fontWeight: 'bold', color }}>{value}</div>
-                    {sub && <div style={{ fontSize: 22, color: '#6b7280', marginTop: 4 }}>{sub}</div>}
+                    <div style={{ fontSize: 8, color: '#9ca3af', marginBottom: 1 }}>{label}</div>
+                    <div style={{ fontSize: 11, fontWeight: 'bold', color }}>{value}</div>
+                    {sub && <div style={{ fontSize: 7, color: '#6b7280', marginTop: 1 }}>{sub}</div>}
                   </div>
                 </div>
               );
 
               return (
-                <div style={{ marginBottom: 36 }}>
-                  <div style={{ fontSize: 28, color: '#aaa', marginBottom: 18, letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Live Data</div>
+                <div style={{ marginBottom: 11 }}>
+                  <div style={{ fontSize: 8, color: '#aaa', marginBottom: 6, letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Live Data</div>
 
                   {statRow('🚇', 'Trains Arriving', arrivals > 0 ? `${arrivals} in next 10 min` : 'None scheduled', arrivals > 0 ? '#6ee7b7' : '#4b5563')}
                   {statRow('👥', 'Rider Volume', riders > 0 ? `${riders.toLocaleString()} / hr` : 'No data', '#93c5fd', riders > 0 ? `${Math.round(riders / maxRidership * 100)}% of peak station` : null)}
                   {statRow('🚨', 'Crime (YTD)', crimes > 0 ? `${crimes} incidents` : 'No data', crimes > 200 ? '#f87171' : crimes > 50 ? '#fb923c' : '#86efac', crimes > 0 ? `${Math.round(crimes / maxCrime * 100)}% of highest station` : null)}
 
                   {stationAlerts.length > 0 && (
-                    <div style={{ marginTop: 4 }}>
+                    <div style={{ marginTop: 2 }}>
                       {stationAlerts.map(({ line, severity, effect }) => (
                         <div key={line} style={{
-                          display: 'flex', alignItems: 'center', gap: 24,
-                          padding: '20px 24px', marginBottom: 14, borderRadius: 14,
+                          display: 'flex', alignItems: 'center', gap: 7,
+                          padding: '6px 7px', marginBottom: 5, borderRadius: 5,
                           background: `${SEVERITY_COLOR[severity]}18`,
                           border: `1px solid ${SEVERITY_COLOR[severity]}88`,
                         }}>
-                          <span style={{ fontSize: 52, flexShrink: 0 }}>⚠️</span>
+                          <span style={{ fontSize: 16, flexShrink: 0 }}>⚠️</span>
                           <div>
-                            <div style={{ fontSize: 26, color: '#9ca3af', marginBottom: 4 }}>
+                            <div style={{ fontSize: 8, color: '#9ca3af', marginBottom: 1 }}>
                               Alert — Line {line}
                             </div>
-                            <div style={{ fontSize: 34, fontWeight: 'bold', color: SEVERITY_COLOR[severity] }}>
+                            <div style={{ fontSize: 11, fontWeight: 'bold', color: SEVERITY_COLOR[severity] }}>
                               {effect.replace(/_/g, ' ')}
                             </div>
-                            <div style={{ fontSize: 22, color: '#6b7280', marginTop: 4 }}>
+                            <div style={{ fontSize: 7, color: '#6b7280', marginTop: 1 }}>
                               {severity === 1 ? 'Minor' : severity === 2 ? 'Significant' : 'Severe'}
                             </div>
                           </div>
@@ -1017,7 +1018,7 @@ export default function SubwayMap() {
               );
             })()}
 
-            <div style={{ fontSize: 28, color: '#ccc', marginBottom: 14 }}>Connected stations:</div>
+            <div style={{ fontSize: 8, color: '#ccc', marginBottom: 5 }}>Connected stations:</div>
             {EDGES
               .filter(e => (e.from === selected || e.to === selected) && activeLines.has(e.line))
               .map((e, i) => {
@@ -1025,15 +1026,15 @@ export default function SubwayMap() {
                 const other   = STATION_MAP[otherId];
                 return other ? (
                   <div key={i} onClick={() => setSelected(otherId)} style={{
-                    padding: '10px 18px', marginBottom: 8, borderRadius: 10,
-                    background: '#0f3460', cursor: 'pointer', fontSize: 28,
-                    display: 'flex', alignItems: 'center', gap: 16,
+                    padding: '4px 6px', marginBottom: 2, borderRadius: 4,
+                    background: '#0f3460', cursor: 'pointer', fontSize: 8,
+                    display: 'flex', alignItems: 'center', gap: 5,
                   }}>
                     <span style={{
-                      width: 44, height: 44, borderRadius: '50%', flexShrink: 0,
+                      width: 13, height: 13, borderRadius: '50%', flexShrink: 0,
                       background: LINES[e.line]?.color, display: 'inline-flex',
                       alignItems: 'center', justifyContent: 'center',
-                      fontSize: 22, fontWeight: 'bold',
+                      fontSize: 7, fontWeight: 'bold',
                       color: LINES[e.line]?.color === '#FCCC0A' ? '#000' : '#fff',
                     }}>{e.line}</span>
                     {other.name}
@@ -1053,15 +1054,15 @@ export default function SubwayMap() {
         <div style={{
           position: 'fixed', left: contextMenu.x, top: contextMenu.y, zIndex: 9500,
           background: 'rgba(13,18,38,0.97)', border: '1px solid #0f3460',
-          borderRadius: 10, padding: '6px 0', minWidth: 200,
+          borderRadius: 5, padding: '3px 0', minWidth: 107,
           boxShadow: '0 8px 32px rgba(0,0,0,0.8)',
         }} onClick={e => e.stopPropagation()}>
-          <div style={{ padding: '10px 20px', fontSize: 22, color: '#4b5563', letterSpacing: 1, textTransform: 'uppercase' }}>
+          <div style={{ padding: '5px 11px', fontSize: 12, color: '#4b5563', letterSpacing: 1, textTransform: 'uppercase' }}>
             Line {contextMenu.lineId}
           </div>
           <div onClick={() => { openSchedule(contextMenu.lineId); setContextMenu(null); }} style={{
-            padding: '18px 28px', cursor: 'pointer', fontSize: 32, color: '#eee',
-            display: 'flex', alignItems: 'center', gap: 16,
+            padding: '9px 15px', cursor: 'pointer', fontSize: 17, color: '#eee',
+            display: 'flex', alignItems: 'center', gap: 9,
             borderTop: '1px solid #1e3a5f',
           }}
             onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.07)'}
