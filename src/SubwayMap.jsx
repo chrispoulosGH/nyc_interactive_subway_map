@@ -148,38 +148,6 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
           })
       }
 
-      {/* Alert overlays — rendered on top of tracks with sparse dashes so line color shows through */}
-      {shapes
-        ? shapes.features.flatMap((feature, i) => {
-            const routeNames = (feature.properties?.name || '').trim().split(/\s+/).filter(Boolean);
-            const alertedRoute = routeNames.find(r => activeLines.has(r) && alertsByRoute[r]);
-            if (!alertedRoute) return [];
-            const alert = alertsByRoute[alertedRoute];
-            const color = SEVERITY_COLOR[alert.severity] || '#f59e0b';
-            const rings = feature.geometry.type === 'MultiLineString'
-              ? feature.geometry.coordinates : [feature.geometry.coordinates];
-            return rings.map((coords, j) => (
-              <Polyline
-                key={`alert-shape-${i}-${j}`}
-                positions={coords.map(([lng, lat]) => [lat, lng])}
-                pathOptions={{ color, weight: 3, opacity: 0.8, dashArray: '4 10' }}
-              />
-            ));
-          })
-        : visibleEdges.map((edge, i) => {
-            const from  = STATION_MAP[edge.from];
-            const to    = STATION_MAP[edge.to];
-            const alert = alertsByRoute[edge.line];
-            if (!from || !to || !alert) return null;
-            return (
-              <Polyline
-                key={`alert-${i}`}
-                positions={[[from.lat, from.lng], [to.lat, to.lng]]}
-                pathOptions={{ color: SEVERITY_COLOR[alert.severity] || '#f59e0b', weight: 3, opacity: 0.8, dashArray: '4 10' }}
-              />
-            );
-          })
-      }
 
       {/* Ridership halos — rendered beneath station dots */}
       {showRidership && visibleStations.map(station => {
