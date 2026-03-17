@@ -575,13 +575,22 @@ export default function SubwayMap() {
     fetch('/api/stops').then(r => r.json()).then(setGtfsStops).catch(() => {});
   }, []);
 
-  // Override STATIONS coordinates with precise GTFS positions matched by name
+  // Override STATIONS coordinates with precise GTFS positions matched by name, then proximity
   const resolvedStations = useMemo(() => {
     if (!gtfsStops || gtfsStops.length === 0) return STATIONS;
     const byName = new Map(gtfsStops.map(s => [normName(s.name), s]));
     return STATIONS.map(s => {
-      const match = byName.get(normName(s.name));
-      return match ? { ...s, lat: match.lat, lng: match.lng } : s;
+      // 1. Exact name match
+      const nameMatch = byName.get(normName(s.name));
+      if (nameMatch) return { ...s, lat: nameMatch.lat, lng: nameMatch.lng };
+      // 2. Proximity fallback — nearest GTFS stop within 150m
+      let best = null, bestDist = Infinity;
+      for (const gs of gtfsStops) {
+        const d = Math.hypot(s.lat - gs.lat, s.lng - gs.lng);
+        if (d < bestDist) { bestDist = d; best = gs; }
+      }
+      // ~0.0014 degrees ≈ 150m
+      return best && bestDist < 0.0014 ? { ...s, lat: best.lat, lng: best.lng } : s;
     });
   }, [gtfsStops]);
 
