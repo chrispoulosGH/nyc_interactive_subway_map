@@ -837,13 +837,13 @@ export default function SubwayMap() {
                   opacity: active ? 1 : 0.4, transition: 'all 0.15s',
                 }}>
                   <span style={{
-                    width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+                    width: 29, height: 29, borderRadius: '50%', flexShrink: 0,
                     background: active ? line.color : '#333',
                     color: line.color === '#FCCC0A' ? '#000' : '#fff',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontWeight: 'bold', fontSize: 12,
+                    fontWeight: 'bold', fontSize: 13,
                   }}>{id}</span>
-                  <span style={{ fontSize: 10, color: active ? '#ddd' : '#555', textAlign: 'left' }}>{line.name}</span>
+                  <span style={{ fontSize: 11, color: active ? '#ddd' : '#555', textAlign: 'left' }}>{line.name}</span>
                 </button>
               );
             })}
@@ -857,7 +857,7 @@ export default function SubwayMap() {
             display: 'flex', flexDirection: 'column', gap: 5,
             maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
           }}>
-            <div style={{ fontSize: 8, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 2 }}>Controls</div>
+            <div style={{ fontSize: 9, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 2 }}>Controls</div>
 
             {/* Overlay toggles */}
             {[
@@ -867,22 +867,22 @@ export default function SubwayMap() {
               { label: 'Station Labels', icon: '🏷', active: showLabels,    toggle: () => setShowLabels(v => !v),    color: '#a78bfa' },
             ].map(({ label, icon, active, toggle, color }) => (
               <button key={label} onClick={toggle} style={{
-                display: 'flex', alignItems: 'center', gap: 9,
-                width: '100%', padding: '5px 7px', borderRadius: 5,
+                display: 'flex', alignItems: 'center', gap: 10,
+                width: '100%', padding: '6px 8px', borderRadius: 5,
                 cursor: 'pointer', border: `1px solid ${active ? color : '#6b7280'}`,
                 background: active ? `${color}22` : 'rgba(255,255,255,0.06)',
                 transition: 'all 0.15s',
               }}>
-                <span style={{ fontSize: 12, flexShrink: 0 }}>{icon}</span>
-                <span style={{ fontSize: 10, color: active ? '#ddd' : '#9ca3af', textAlign: 'left', flex: 1 }}>{label}</span>
+                <span style={{ fontSize: 13, flexShrink: 0 }}>{icon}</span>
+                <span style={{ fontSize: 11, color: active ? '#ddd' : '#9ca3af', textAlign: 'left', flex: 1 }}>{label}</span>
                 <span style={{
-                  width: 14, height: 8, borderRadius: 4, flexShrink: 0,
+                  width: 15, height: 9, borderRadius: 4, flexShrink: 0,
                   background: active ? color : '#4b5563',
                   display: 'flex', alignItems: 'center', padding: '0 1px',
                   transition: 'background 0.2s',
                 }}>
                   <span style={{
-                    width: 6, height: 6, borderRadius: '50%', background: '#fff',
+                    width: 7, height: 7, borderRadius: '50%', background: '#fff',
                     transform: active ? 'translateX(7px)' : 'translateX(0)',
                     transition: 'transform 0.2s', display: 'block',
                   }} />
@@ -891,7 +891,7 @@ export default function SubwayMap() {
             ))}
 
             {/* Alert type toggles */}
-            <div style={{ fontSize: 8, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginTop: 3, marginBottom: 0 }}>Alert Filter</div>
+            <div style={{ fontSize: 9, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginTop: 3, marginBottom: 0 }}>Alert Filter</div>
             {[
               { sev: 1, color: SEVERITY_COLOR[1], label: 'Minor Delay',       icon: '⚠' },
               { sev: 2, color: SEVERITY_COLOR[2], label: 'Major Delay',        icon: '🔴' },
@@ -900,23 +900,23 @@ export default function SubwayMap() {
               const active = severityFilter.has(sev);
               return (
                 <button key={sev} onClick={() => toggleSeverity(sev)} style={{
-                  display: 'flex', alignItems: 'center', gap: 9,
-                  width: '100%', padding: '5px 7px', borderRadius: 5,
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  width: '100%', padding: '6px 8px', borderRadius: 5,
                   cursor: 'pointer', border: `1px solid ${active ? color : '#6b7280'}`,
                   background: active ? `${color}22` : 'rgba(255,255,255,0.06)',
                   transition: 'all 0.15s',
                   boxShadow: active ? `0 0 3px ${color}44` : 'none',
                 }}>
-                  <span style={{ fontSize: 12, flexShrink: 0 }}>{icon}</span>
-                  <span style={{ fontSize: 10, color: active ? color : '#9ca3af', textAlign: 'left', flex: 1 }}>{label}</span>
+                  <span style={{ fontSize: 13, flexShrink: 0 }}>{icon}</span>
+                  <span style={{ fontSize: 11, color: active ? color : '#9ca3af', textAlign: 'left', flex: 1 }}>{label}</span>
                   <span style={{
-                    width: 14, height: 8, borderRadius: 4, flexShrink: 0,
+                    width: 15, height: 9, borderRadius: 4, flexShrink: 0,
                     background: active ? color : '#4b5563',
                     display: 'flex', alignItems: 'center', padding: '0 1px',
                     transition: 'background 0.2s',
                   }}>
                     <span style={{
-                      width: 6, height: 6, borderRadius: '50%', background: '#fff',
+                      width: 7, height: 7, borderRadius: '50%', background: '#fff',
                       transform: active ? 'translateX(7px)' : 'translateX(0)',
                       transition: 'transform 0.2s', display: 'block',
                     }} />
