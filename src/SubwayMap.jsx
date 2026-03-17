@@ -388,7 +388,7 @@ function VehicleLayer({ vehicles, showVehicles, activeLines }) {
   return null;
 }
 
-function ScheduleDialog({ schedule, onClose, onMove, onResize }) {
+function ScheduleDialog({ schedule, onClose, onMove, onResize, isMobile }) {
   const { lineId, trips, pos, size, loading } = schedule;
   const lineColor = LINES[lineId]?.color || '#888';
   const textColor = lineColor === '#FCCC0A' ? '#000' : '#fff';
@@ -486,26 +486,30 @@ function ScheduleDialog({ schedule, onClose, onMove, onResize }) {
   });
 
   return (
-    <div style={{
+    <div style={isMobile ? {
+      position: 'fixed', top: 0, left: 0, right: 0, bottom: 56, zIndex: 9000,
+      background: 'rgba(13,18,38,0.97)', border: `2px solid ${lineColor}`,
+      display: 'flex', flexDirection: 'column',
+    } : {
       position: 'fixed', left: pos.x, top: pos.y, zIndex: 9000,
       width: size.w, height: size.h,
       background: 'rgba(13,18,38,0.97)', border: `2px solid ${lineColor}`,
       borderRadius: 16, boxShadow: `0 12px 48px rgba(0,0,0,0.9), 0 0 24px ${lineColor}44`,
       userSelect: 'none', display: 'flex', flexDirection: 'column',
     }}>
-      {/* Edge resize strips */}
-      {['n','s','e','w'].map(e => (
+      {/* Edge resize strips — desktop only */}
+      {!isMobile && ['n','s','e','w'].map(e => (
         <div key={e} style={edgeStyle(e)} onMouseDown={ev => handleResizeDown(ev, e)} />
       ))}
-      {/* Corner resize handles */}
-      {['nw','ne','sw','se'].map(c => (
+      {/* Corner resize handles — desktop only */}
+      {!isMobile && ['nw','ne','sw','se'].map(c => (
         <div key={c} style={cornerStyle(c)} onMouseDown={e => handleResizeDown(e, c)} />
       ))}
 
       {/* Title bar */}
-      <div onMouseDown={handleDragDown} style={{
+      <div onMouseDown={isMobile ? undefined : handleDragDown} style={{
         display: 'flex', alignItems: 'center', gap: 9, padding: '9px 13px', flexShrink: 0,
-        cursor: isDragging ? 'grabbing' : 'grab',
+        cursor: isMobile ? 'default' : isDragging ? 'grabbing' : 'grab',
         background: `${lineColor}22`, borderBottom: `1px solid ${lineColor}55`,
         borderRadius: '14px 14px 0 0',
       }}>
@@ -549,6 +553,10 @@ function ScheduleDialog({ schedule, onClose, onMove, onResize }) {
 export default function SubwayMap() {
   const [selected, setSelected]       = useState(null);
   const [activeLines, setActiveLines] = useState(new Set(Object.keys(LINES)));
+  const [isMobile, setIsMobile]       = useState(() => window.innerWidth < 768);
+  const [mobilePanel, setMobilePanel] = useState(null); // 'lines' | 'controls' | 'alerts' | null
+  const longPressRef                  = useRef(null);
+  const longPressFiredRef             = useRef(false);
   const [showVehicles,  setShowVehicles]  = useState(false);
   const [showRidership, setShowRidership] = useState(false);
   const [showLabels,    setShowLabels]    = useState(true);
@@ -573,6 +581,18 @@ export default function SubwayMap() {
       return match ? { ...s, lat: match.lat, lng: match.lng } : s;
     });
   }, [gtfsStops]);
+
+  // Resize listener for mobile detection
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+
+  // Close bottom panel when a station is selected on mobile
+  useEffect(() => {
+    if (isMobile && selected) setMobilePanel(null);
+  }, [selected, isMobile]);
 
   // Dismiss context menu on any outside click
   useEffect(() => {
@@ -764,7 +784,12 @@ export default function SubwayMap() {
           </MapContainer>
 
           {/* Alert legend */}
-          <div style={{
+          <div style={isMobile ? {
+            position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 2000,
+            display: mobilePanel === 'alerts' ? 'block' : 'none',
+            background: 'rgba(13,18,40,0.98)', borderTop: '2px solid #374151',
+            padding: '11px 13px', maxHeight: '60vh', overflowY: 'auto',
+          } : {
             position: 'absolute', top: 16, right: 16, zIndex: 1000,
             background: 'rgba(15, 20, 40, 0.93)', borderRadius: 8,
             border: '1px solid #374151', padding: '11px 13px',
@@ -821,14 +846,21 @@ export default function SubwayMap() {
           </div>
 
           {/* Legend overlay + control panel */}
-          <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 1000, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+          <div style={isMobile ? {
+            position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 2000,
+            display: (mobilePanel === 'lines' || mobilePanel === 'controls') ? 'flex' : 'none',
+            flexDirection: 'column', background: 'rgba(13,18,40,0.98)',
+            borderTop: '2px solid #0f3460', maxHeight: '60vh', overflowY: 'auto',
+          } : { position: 'absolute', top: 16, left: 16, zIndex: 1000, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
 
           {/* Lines legend */}
           <div style={{
-            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 6,
-            border: '1px solid #0f3460', padding: '8px 9px',
+            background: 'rgba(15, 20, 40, 0.93)', borderRadius: isMobile ? 0 : 6,
+            border: isMobile ? 'none' : '1px solid #0f3460', padding: '8px 9px',
             backdropFilter: 'blur(6px)',
-            maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
+            maxHeight: isMobile ? 'none' : 'calc(100vh - 100px)', overflowY: 'auto',
+            display: isMobile && mobilePanel !== 'lines' ? 'none' : 'block',
+            flex: isMobile ? 1 : 'unset',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 3, gap: 5 }}>
               <div style={{ fontSize: 12, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold' }}>Lines</div>
@@ -840,14 +872,26 @@ export default function SubwayMap() {
                 {allOn ? 'All Off' : 'All On'}
               </button>
             </div>
-            <div style={{ fontSize: 11, color: '#8899bb', marginBottom: 6, fontStyle: 'italic' }}>Right-click line for schedule</div>
+            <div style={{ fontSize: 11, color: '#8899bb', marginBottom: 6, fontStyle: 'italic' }}>
+              {isMobile ? 'Long-press line for schedule' : 'Right-click line for schedule'}
+            </div>
 
             {Object.entries(LINES).map(([id, line]) => {
               const active = activeLines.has(id);
               return (
                 <button key={id}
-                  onClick={() => toggleLine(id)}
+                  onClick={() => { if (!longPressFiredRef.current) toggleLine(id); }}
                   onContextMenu={e => { e.preventDefault(); setContextMenu({ lineId: id, x: e.clientX, y: e.clientY }); }}
+                  onTouchStart={() => {
+                    longPressFiredRef.current = false;
+                    longPressRef.current = setTimeout(() => {
+                      longPressFiredRef.current = true;
+                      setContextMenu({ lineId: id, x: window.innerWidth / 2 - 54, y: window.innerHeight / 2 - 40 });
+                      setMobilePanel(null);
+                    }, 600);
+                  }}
+                  onTouchEnd={() => clearTimeout(longPressRef.current)}
+                  onTouchMove={() => clearTimeout(longPressRef.current)}
                   title="Right-click for schedule"
                   style={{
                   display: 'flex', alignItems: 'center', gap: 9,
@@ -872,11 +916,13 @@ export default function SubwayMap() {
 
           {/* Control panel */}
           <div style={{
-            background: 'rgba(15, 20, 40, 0.93)', borderRadius: 6,
-            border: '1px solid #0f3460', padding: '8px 9px',
+            background: 'rgba(15, 20, 40, 0.93)', borderRadius: isMobile ? 0 : 6,
+            border: isMobile ? 'none' : '1px solid #0f3460', padding: '8px 9px',
             backdropFilter: 'blur(6px)',
-            display: 'flex', flexDirection: 'column', gap: 5,
-            maxHeight: 'calc(100vh - 100px)', overflowY: 'auto',
+            display: isMobile && mobilePanel !== 'controls' ? 'none' : 'flex',
+            flexDirection: 'column', gap: 5,
+            maxHeight: isMobile ? 'none' : 'calc(100vh - 100px)', overflowY: 'auto',
+            flex: isMobile ? 1 : 'unset',
           }}>
             <div style={{ fontSize: 12, color: '#aaa', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 'bold', marginBottom: 2 }}>Controls</div>
 
@@ -952,7 +998,11 @@ export default function SubwayMap() {
 
         {/* Station info panel */}
         {selectedStation && (
-          <div style={{
+          <div style={isMobile ? {
+            position: 'fixed', bottom: 56, left: 0, right: 0, zIndex: 1800,
+            background: '#16213e', borderTop: '2px solid #0f3460',
+            padding: 13, overflowY: 'auto', color: '#eee', maxHeight: '55vh',
+          } : {
             width: 187, background: '#16213e', borderLeft: '1px solid #0f3460',
             padding: 13, overflowY: 'auto', color: '#eee',
           }}>
@@ -1066,15 +1116,51 @@ export default function SubwayMap() {
         )}
       </div>
 
-      <div style={{ padding: '4px 16px', background: '#16213e', fontSize: 11, color: '#555', borderTop: '1px solid #0f3460', display: 'flex', justifyContent: 'space-between' }}>
-        <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Scroll to zoom · Click + drag to pan</span>
-        <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Click station for Station Info</span>
-      </div>
+      {!isMobile && (
+        <div style={{ padding: '4px 16px', background: '#16213e', fontSize: 11, borderTop: '1px solid #0f3460', display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Scroll to zoom · Click + drag to pan</span>
+          <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Click station for Station Info</span>
+        </div>
+      )}
+
+      {/* Mobile bottom tab bar */}
+      {isMobile && (
+        <div style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 3000,
+          display: 'flex', background: '#0d1226', borderTop: '2px solid #0f3460', height: 56,
+        }}>
+          {[
+            { id: 'lines',    icon: '🚇', label: 'Lines'    },
+            { id: 'controls', icon: '⚙️',  label: 'Controls' },
+            { id: 'alerts',   icon: '⚠️',  label: 'Alerts'   },
+          ].map(({ id, icon, label }) => {
+            const active = mobilePanel === id;
+            return (
+              <button key={id}
+                onClick={() => { setMobilePanel(prev => prev === id ? null : id); setSelected(null); }}
+                style={{
+                  flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  justifyContent: 'center', gap: 2, background: 'none', border: 'none',
+                  cursor: 'pointer', color: active ? '#93c5fd' : '#6b7280',
+                  borderTop: active ? '2px solid #93c5fd' : '2px solid transparent',
+                  fontSize: 11, fontWeight: active ? 'bold' : 'normal', transition: 'all 0.15s',
+                }}>
+                <span style={{ fontSize: 20 }}>{icon}</span>
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Context menu */}
       {contextMenu && (
         <div style={{
-          position: 'fixed', left: contextMenu.x, top: contextMenu.y, zIndex: 9500,
+          position: 'fixed',
+          left: isMobile ? '50%' : contextMenu.x,
+          top: isMobile ? '50%' : contextMenu.y,
+          transform: isMobile ? 'translate(-50%, -50%)' : 'none',
+          zIndex: 9500,
           background: 'rgba(13,18,38,0.97)', border: '1px solid #0f3460',
           borderRadius: 5, padding: '3px 0', minWidth: 107,
           boxShadow: '0 8px 32px rgba(0,0,0,0.8)',
@@ -1100,6 +1186,7 @@ export default function SubwayMap() {
         <ScheduleDialog
           key={schedule.lineId}
           schedule={schedule}
+          isMobile={isMobile}
           onClose={() => setSchedules(prev => prev.filter(s => s.lineId !== schedule.lineId))}
           onMove={pos => setSchedules(prev => prev.map(s => s.lineId === schedule.lineId ? { ...s, pos } : s))}
           onResize={({ pos, size }) => setSchedules(prev => prev.map(s => s.lineId === schedule.lineId ? { ...s, pos, size } : s))}
