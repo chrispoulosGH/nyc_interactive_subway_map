@@ -821,7 +821,7 @@ export default function SubwayMap() {
                 {allOn ? 'All Off' : 'All On'}
               </button>
             </div>
-            <div style={{ fontSize: 7, color: '#8899bb', marginBottom: 6, fontStyle: 'italic' }}>Right-click line for schedule</div>
+            <div style={{ fontSize: 11, color: '#8899bb', marginBottom: 6, fontStyle: 'italic' }}>Right-click line for schedule</div>
 
             {Object.entries(LINES).map(([id, line]) => {
               const active = activeLines.has(id);
@@ -1047,8 +1047,9 @@ export default function SubwayMap() {
         )}
       </div>
 
-      <div style={{ padding: '4px 16px', background: '#16213e', fontSize: 11, color: '#555', borderTop: '1px solid #0f3460' }}>
-        Scroll to zoom · Click + drag to pan
+      <div style={{ padding: '4px 16px', background: '#16213e', fontSize: 11, color: '#555', borderTop: '1px solid #0f3460', display: 'flex', justifyContent: 'space-between' }}>
+        <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Scroll to zoom · Click + drag to pan</span>
+        <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Click station for Station Info</span>
       </div>
 
       {/* Context menu */}
