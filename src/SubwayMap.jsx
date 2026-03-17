@@ -287,11 +287,47 @@ function trainScale(zoom) {
   return Math.max(0.3, ((zoom - 11) * 3 + 8) / 11);
 }
 
-function VehicleLayer({ vehicles, showVehicles, activeLines }) {
-  const map        = useMap();
-  const markersRef = useRef(new Map()); // tripId → Leaflet marker
-  const animRef    = useRef(new Map()); // tripId → { snapCur, snapNext, secsToNext, startSec, routeId, bearing }
-  const rafRef     = useRef(null);
+function VehicleLayer({ vehicles, showVehicles, activeLines, shapes }) {
+  const map              = useMap();
+  const markersRef       = useRef(new Map());
+  const animRef          = useRef(new Map());
+  const rafRef           = useRef(null);
+  const shapeSegsRef     = useRef({}); // routeId → [[alat,alng,blat,blng], ...]
+
+  // Pre-build per-route shape segment lookup when GTFS shapes load
+  useEffect(() => {
+    if (!shapes) return;
+    const segs = {};
+    for (const feature of shapes.features) {
+      const routeNames = (feature.properties?.name || '').trim().split(/\s+/).filter(Boolean);
+      const rings = feature.geometry.type === 'MultiLineString'
+        ? feature.geometry.coordinates : [feature.geometry.coordinates];
+      for (const name of routeNames) {
+        if (!segs[name]) segs[name] = [];
+        for (const coords of rings) {
+          for (let i = 0; i < coords.length - 1; i++) {
+            const [alng, alat] = coords[i], [blng, blat] = coords[i + 1];
+            segs[name].push([alat, alng, blat, blng]);
+          }
+        }
+      }
+    }
+    shapeSegsRef.current = segs;
+  }, [shapes]);
+
+  // Snap to GTFS shape geometry, falling back to station edges
+  const snapToLine = (lat, lng, routeId) => {
+    const segs = shapeSegsRef.current[routeId];
+    if (segs && segs.length > 0) {
+      let best = null;
+      for (const [alat, alng, blat, blng] of segs) {
+        const p = projectOnSegment(lat, lng, alat, alng, blat, blng);
+        if (!best || p.distSq < best.distSq) best = p;
+      }
+      return best ? { lat: best.lat, lng: best.lng } : null;
+    }
+    return snapPointToRoute(lat, lng, routeId);
+  };
   const [zoom, setZoom] = useState(map.getZoom());
   useMapEvents({ zoomend: e => setZoom(e.target.getZoom()) });
 
@@ -321,8 +357,8 @@ function VehicleLayer({ vehicles, showVehicles, activeLines }) {
 
     for (const v of vehicles) {
       if (!activeLines.has(v.routeId)) continue;
-      const snapCur  = snapPointToRoute(v.lat,     v.lng,     v.routeId);
-      const snapNext = snapPointToRoute(v.nextLat, v.nextLng, v.routeId);
+      const snapCur  = snapToLine(v.lat,     v.lng,     v.routeId);
+      const snapNext = snapToLine(v.nextLat, v.nextLng, v.routeId);
       if (!snapCur || !snapNext) continue;
 
       incoming.add(v.tripId);
@@ -792,6 +828,7 @@ export default function SubwayMap() {
               vehicles={vehicles}
               showVehicles={showVehicles}
               activeLines={activeLines}
+              shapes={shapes}
             />
           </MapContainer>
 
