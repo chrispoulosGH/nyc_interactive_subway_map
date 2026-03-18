@@ -35,6 +35,8 @@ function CreatePane({ name, zIndex }) {
 
 function ZoomControls() {
   const map = useMap();
+  const [zoom, setZoom] = useState(map.getZoom());
+  useMapEvents({ zoomend: e => setZoom(e.target.getZoom()) });
   const btnStyle = {
     width: 49, height: 49, fontSize: 28, fontWeight: 'bold',
     background: 'rgba(15,20,40,0.92)', color: '#eee',
@@ -48,6 +50,7 @@ function ZoomControls() {
       display: 'flex', flexDirection: 'column', gap: 8,
     }}>
       <button style={btnStyle} onClick={() => map.zoomIn()}>+</button>
+      <div style={{ ...btnStyle, fontSize: 11, cursor: 'default', color: '#93c5fd' }}>{zoom.toFixed(1)}</div>
       <button style={btnStyle} onClick={() => map.zoomOut()}>−</button>
       <button
         style={{ ...btnStyle, fontSize: 10, height: 25 }}
@@ -110,9 +113,9 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
   const labelSize    = Math.max(7, Math.round((zoom - 11) * 1.2 + 8));
   const circleRadius = Math.max(3, Math.round((zoom - 11) * 1.5 + 4));
 
-  // Progressive label tiers by line count: 1=major hub, 2=3-line, 3=2-line, 4=local
-  const stationLabelTier = (s) => s.lines.length >= 4 ? 1 : s.lines.length >= 3 ? 2 : s.lines.length >= 2 ? 3 : 4;
-  const maxLabelTier = zoom >= 15 ? 4 : zoom >= 14 ? 3 : zoom >= 13 ? 2 : 1;
+  // Progressive label tiers: 1=5+lines, 2=4-line, 3=3-line, 4=2-line, 5=local
+  const stationLabelTier = (s) => s.lines.length >= 6 ? 1 : s.lines.length >= 5 ? 2 : s.lines.length >= 4 ? 3 : s.lines.length >= 3 ? 4 : 5;
+  const maxLabelTier = zoom >= 13.5 ? 5 : zoom >= 13 ? 4 : zoom >= 12.5 ? 3 : zoom >= 12 ? 2 : zoom >= 11.5 ? 1 : 0;
 
   return (
     <>
