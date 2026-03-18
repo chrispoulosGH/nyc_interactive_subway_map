@@ -1142,7 +1142,10 @@ export default function SubwayMap() {
       {!isMobile && (
         <div style={{ padding: '4px 16px', background: '#16213e', fontSize: 11, borderTop: '1px solid #0f3460', display: 'flex', justifyContent: 'space-between' }}>
           <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Scroll to zoom · Click + drag to pan</span>
-          <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Click station for Station Info</span>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 1 }}>
+            <span style={{ color: '#8899bb', fontStyle: 'italic' }}>Click station for Station Info</span>
+            <span style={{ color: '#556677', fontSize: 10 }}>C.Poulos</span>
+          </div>
         </div>
       )}
 
