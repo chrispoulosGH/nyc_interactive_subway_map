@@ -110,6 +110,10 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
   const labelSize    = Math.max(7, Math.round((zoom - 11) * 1.2 + 8));
   const circleRadius = Math.max(3, Math.round((zoom - 11) * 1.5 + 4));
 
+  // Progressive label tiers by line count: 1=major hub, 2=3-line, 3=2-line, 4=local
+  const stationLabelTier = (s) => s.lines.length >= 4 ? 1 : s.lines.length >= 3 ? 2 : s.lines.length >= 2 ? 3 : 4;
+  const maxLabelTier = zoom >= 15 ? 4 : zoom >= 14 ? 3 : zoom >= 13 ? 2 : 1;
+
   return (
     <>
       {/* Edges — GeoJSON track geometry when available, straight-line fallback */}
@@ -217,7 +221,7 @@ function MapLayers({ visibleEdges, visibleStations, selected, setSelected, activ
             }}
             eventHandlers={{ click: () => setSelected(isSelected ? null : station.id) }}
           >
-            {showLabels && (
+            {showLabels && stationLabelTier(station) <= maxLabelTier && (
               <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent={true} className="station-label">
                 <span style={{ fontSize: labelSize, fontWeight: 300 }}>{station.name}</span>
                 {showLines && <><br /><span style={{ fontSize: labelSize - 1, fontWeight: 300, opacity: 0.75 }}>{station.lines.join(' · ')}</span></>}
